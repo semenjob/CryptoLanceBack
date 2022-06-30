@@ -25,3 +25,48 @@ model Post {
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
 }
+
+model WorkStatus {
+  code        WorkStatusCode @unique @default(PENDING)
+  name        String
+  description String
+  Work        Work[]
+}
+
+model Work {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String
+  status      WorkStatus     @relation(fields: [statusCode], references: [code])
+  statusCode  WorkStatusCode
+  price       Int
+  client      Client         @relation(fields: [clientId], references: [id])
+  clientId    Int
+}
+
+model Freelancer {
+  id        Int    @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email     String @unique
+  password  String
+  country   String?
+  photo     String?
+}
+
+model Client {
+  id        Int    @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email     String @unique
+  password  String
+  country   String?
+  photo     String?
+  Work      Work[]
+}
+
+enum WorkStatusCode {
+  PENDING
+  IN_PROGRESS
+  CLOSED
+}
